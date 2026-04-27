@@ -1,0 +1,77 @@
+/* ═══════════════════════════════════════════════════
+   MODAL (SHARED)
+   ═══════════════════════════════════════════════════ */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-dark);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    place-items: center;
+}
+
+.modal-backdrop.open { display: grid; }
+
+.modal-window {
+    width: 700px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: var(--bg-1);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-heavy);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.modal-close-btn {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    transition: background 0.1s, color 0.1s;
+}
+.modal-close-btn:hover { background: var(--accent-dim); color: var(--text-primary); }
+.modal-close-btn svg   { width: 14px; height: 14px; stroke-width: 1.5; }
+
+.modal-body {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.telemetry-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 40px 0;
+}
+
+.modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

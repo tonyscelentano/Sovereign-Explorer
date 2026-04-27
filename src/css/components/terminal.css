@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════
+   TERMINAL DOCK
+   ═══════════════════════════════════════════════════ */
+#terminal-dock {
+    height: var(--terminal-h);
+    min-height: 100px;
+    background: var(--f-terminal-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px 10px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--text-label);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.terminal-header-spacer { flex: 1; }
+
+.shell-select {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+}
+.shell-select:hover { color: var(--text-primary); }
+
+.term-status { height: 10px; line-height: 10px; font-size: 11px; }
+.status-idle { color: var(--text-dim); }
+.status-running { color: var(--green); animation: pulse 1.5s infinite; }
+.status-error { color: var(--red); }
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.term-kill-btn {
+    width: 20px; height: 20px;
+    display: flex; place-items: center;
+    color: var(--amber);
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background 0.1s, color 0.1s;
+}
+.term-kill-btn i { width: 14px; height: 14px; }
+.term-kill-btn:hover { background: rgba(255,0,0,0.2); color: var(--red); }
+
+#terminal-output {
+    flex: 1;
+    overflow: hidden;
+    background: transparent;
+}
+
+.terminal-fallback-log {
+    flex: 1;
+    overflow: auto;
+    font-family: var(--f-terminal);
+    font-size: var(--f-terminal-size);
+    font-weight: var(--f-terminal-weight);
+    color: var(--f-terminal-color);
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 2px 0;
+}
+
+.terminal-fallback-line {
+    margin-bottom: 3px;
+    text-shadow: 0 0 calc(var(--f-terminal-glow) * 1px) currentColor;
+}
+
+.terminal-line {
+    margin-bottom: 2px;
+    text-shadow: 0 0 calc(var(--f-terminal-glow) * 1px) currentColor;
+}
+
+/* Terminal line semantic classes */
+.line-cmd    { color: var(--text-primary); }
+.line-err    { color: var(--red); }
+.line-warn   { color: var(--amber); }
+.line-ok     { color: var(--green); }
+.line-dim    { color: var(--text-dim); }
+.line-stdin  { color: var(--accent); opacity: 0.7; }
+
+/* Running-mode prompt indicator */
+.terminal-input-row.stdin-mode .prompt { color: var(--amber); }
+
+.terminal-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+}
+
+.prompt { 
+    color: var(--green); 
+    font-size: var(--f-terminal-size); 
+    font-family: var(--f-terminal);
+}
+
+#terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--f-terminal);
+    font-weight: var(--f-terminal-weight);
+    font-size: var(--f-terminal-size);
+    caret-color: var(--green);
+    color: var(--f-terminal-color);
+}
+#terminal-input::placeholder { color: var(--text-label); }

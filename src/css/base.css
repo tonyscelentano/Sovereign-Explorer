@@ -1,0 +1,117 @@
+/* ═══════════════════════════════════════════════════
+   SOVEREIGN EXPLORER — Base & Variables
+   ═══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+    --bg-0: #000;
+    --text-primary: #fff;
+    --font: monospace;
+    --radius: 5px;
+    --sidebar-w: 220px;
+    --terminal-h: 200px;
+    --scrying-w: 260px;
+    --toolbar-h: 36px;
+    --action-bar-h: 42px;
+    --accent: #4a9eff;
+    --border: #333;
+    --border-light: #444;
+    --text-dim: #aaa;
+    --bg-2: #1a1a1a;
+
+    /* Typography Zones */
+    --f-ui: 'Inter', system-ui, sans-serif;
+    --f-ui-weight: 400;
+    --f-ui-size: 13px;
+
+    --f-terminal: 'JetBrains Mono', monospace;
+    --f-terminal-weight: 400;
+    --f-terminal-size: 12px;
+    --f-terminal-glow: 0;
+    --f-terminal-bg: #000000;
+    --f-terminal-color: #00ff00;
+    --bg-surface: #121212;
+    --bg-hover: rgba(255, 255, 255, 0.06);
+    --bg-active: rgba(255, 255, 255, 0.1);
+    --bg-deep: #050505;
+    --font-mono: var(--f-terminal, monospace);
+
+    /* Semantic Theme Tokens */
+    --accent-contrast: #000000;
+    --shadow-soft: 0 4px 12px rgba(0,0,0,0.5);
+    --shadow-heavy: 0 16px 48px rgba(0,0,0,0.6);
+    --shadow-modal: 0 20px 60px rgba(0,0,0,0.7);
+    
+    --overlay-dark: rgba(0,0,0,0.6);
+    --selection-bg: rgba(255,255,255,0.08);
+    
+    --color-danger: #ff5050;
+    --color-danger-dim: rgba(255, 80, 80, 0.2);
+    --color-warning: #ffbf00;
+    --color-success: #00ff80;
+}
+
+/* ── Reset ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+    font-family: var(--f-ui);
+    font-weight: var(--f-ui-weight);
+    font-size: var(--f-ui-size);
+    background: var(--bg-0);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+#boot-diagnostics {
+    position: fixed;
+    bottom: 24px; /* Move to bottom-right to stay clear of top-right HUDs */
+    right: 16px;
+    width: min(520px, calc(100vw - 32px));
+    max-height: min(40vh, 320px);
+    overflow: auto;
+    background: var(--overlay-dark);
+    border: 1px solid var(--color-danger-dim);
+    border-radius: 8px;
+    box-shadow: var(--shadow-soft);
+    padding: 10px 12px;
+    z-index: 3000;
+    font-family: var(--f-terminal);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+#boot-diag-close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-dim);
+}
+
+#boot-diag-close:hover {
+    opacity: 1;
+    color: var(--color-danger);
+}
+
+.boot-line + .boot-line { margin-top: 6px; }
+.boot-line.info { color: var(--text-dim); }
+.boot-line.error { color: var(--color-danger); }
+
+button { cursor: pointer; border: none; background: none; color: inherit; font: inherit; }
+input, select { font: inherit; color: inherit; }
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 1px;
+}
+
+/* ── Scrollbars ──────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 99px; }

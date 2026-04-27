@@ -1,0 +1,20 @@
+# Sovereign Explorer Ignore Rules
+node_modules/
+.git/
+.venv/
+venv/
+dist/
+build/
+*.log
+*.tmp
+
+# Tauri/Rust specific ignores (The real block-count killers)
+src-tauri/target/
+src-tauri/bin/
+src-tauri/gen/
+
+# Frontend ignores
+.next/
+out/
+.cache/
+.npm/

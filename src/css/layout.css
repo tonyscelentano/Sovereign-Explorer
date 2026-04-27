@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════
+   SOVEREIGN EXPLORER — Layout Shell
+   ═══════════════════════════════════════════════════ */
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ── Splitters (Snap-Grid) ── */
+.splitter-v {
+    width: 6px;
+    min-width: 6px;
+    background: transparent;
+    cursor: col-resize;
+    z-index: 10;
+    position: relative;
+}
+.splitter-v::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 2px;
+    width: 1px;
+    background: var(--border, #333);
+    transition: background 0.15s;
+}
+.splitter-v:hover::after { background: var(--accent, #4a9eff); }
+
+.splitter-h {
+    height: 6px;
+    min-height: 6px;
+    background: transparent;
+    cursor: row-resize;
+    z-index: 10;
+    position: relative;
+}
+.splitter-h::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 2px;
+    height: 1px;
+    background: var(--border, #333);
+    transition: background 0.15s;
+}
+.splitter-h:hover::after { background: var(--accent, #4a9eff); }
+
+body.is-resizing {
+    user-select: none !important;
+}
+body.is-resizing * {
+    pointer-events: none !important;
+}
+body.is-resizing .splitter-v,
+body.is-resizing .splitter-h {
+    pointer-events: auto !important;
+}
+body.resize-col * {
+    cursor: col-resize !important;
+}
+body.resize-row * {
+    cursor: row-resize !important;
+}
+
+#workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-2);
+    overflow: hidden;
+}

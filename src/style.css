@@ -1,0 +1,25 @@
+/* ═══════════════════════════════════════════════════
+   SOVEREIGN EXPLORER — Master Stylesheet
+   ═══════════════════════════════════════════════════ */
+
+/* Core & Layout */
+@import "./css/base.css";
+@import "./css/layout.css";
+
+/* Components */
+@import "./css/components/toolbar.css";
+@import "./css/components/sidebar.css";
+@import "./css/components/workspace.css";
+@import "./css/components/file-view.css";
+@import "./css/components/terminal.css";
+@import "./css/components/scrying-panel.css";
+@import "./css/components/utility-components.css";
+
+/* Modals */
+@import "./css/modals/shared.css";
+@import "./css/modals/typography.css";
+@import "./css/modals/icon-themer.css";
+@import "./css/modals/visuals.css";
+
+/* Legacy / Features (to be integrated later) */
+@import "./features.css";

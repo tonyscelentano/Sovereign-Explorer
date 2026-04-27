@@ -1,0 +1,47 @@
+# Rust
+target/
+**/*.rs.bk
+
+# Node
+node_modules/
+dist/
+dist-tauri/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tauri
+src-tauri/target/
+src-tauri/bin/
+src-tauri/gen/
+
+# Assets & Theming
+src/assets/themes/IconPacks/*
+!src/assets/themes/IconPacks/ORIO
+!src/assets/themes/IconPacks/.gitkeep
+
+# Project Scaffolding & Agent Contexts
+.env
+.env.*
+!.env.example
+.edge-headless/
+.mcp_venv/
+backups/
+
+# Python
+.venv/
+**/__pycache__/
+.pytest_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary / Log files
+*.log
+*.bak
+*.tmp
+temp/

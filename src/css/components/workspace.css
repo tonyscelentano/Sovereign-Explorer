@@ -1,0 +1,192 @@
+/* ═══════════════════════════════════════════════════
+   WORKSPACE & NAVIGATION
+   ═══════════════════════════════════════════════════ */
+/* ── Action Bar ── */
+.workspace-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.workspace-pane.active-pane {
+    outline: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+    outline-offset: -1px;
+}
+
+.workspace-host {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+}
+
+.workspace-pane-slot {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex: 1;
+}
+
+.workspace-pane-slot-secondary {
+    flex: 0 0 auto;
+    width: 0;
+    overflow: hidden;
+    border-left: 1px solid transparent;
+    transition: width 0.16s ease, border-color 0.16s ease;
+}
+
+.workspace-host.split-open .workspace-pane-slot-secondary {
+    border-left-color: var(--border);
+}
+
+.workspace-pane-splitter {
+    width: 6px;
+    min-width: 6px;
+    background: transparent;
+    cursor: col-resize;
+    position: relative;
+    display: none;
+}
+
+.workspace-pane-splitter::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2px;
+    width: 1px;
+    background: var(--border, #333);
+    transition: background 0.15s;
+}
+
+.workspace-pane-splitter:hover::after {
+    background: var(--accent, #4a9eff);
+}
+
+.workspace-host.split-open .workspace-pane-splitter {
+    display: block;
+}
+
+.workspace-action-bar,
+#action-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--action-bar-h);
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.workspace-nav-buttons,
+#nav-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+.workspace-nav-buttons button,
+#nav-buttons button {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    transition: background 0.1s, color 0.1s;
+}
+.workspace-nav-buttons button:hover,
+#nav-buttons button:hover { background: var(--accent-dim); color: var(--text-primary); }
+.workspace-nav-buttons button svg,
+#nav-buttons button svg   { width: 14px; height: 14px; stroke-width: 1.5; }
+
+.workspace-breadcrumb,
+#breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--text-dim);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.crumb {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: background 0.1s;
+    color: var(--text-dim);
+    flex-shrink: 0;
+}
+.crumb:hover       { background: var(--accent-dim); }
+.crumb.active      { color: var(--text-primary); }
+.crumb-sep         { color: var(--text-label); user-select: none; flex-shrink: 0; }
+
+.workspace-search,
+.search-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0 10px;
+    height: 30px;
+    transition: border-color 0.15s;
+    min-width: 150px;
+}
+.workspace-search:focus-within,
+.search-container:focus-within { border-color: var(--border-light); }
+
+.search-icon { width: 13px; height: 13px; color: var(--text-label); flex-shrink: 0; stroke-width: 1.5; }
+
+.workspace-search-input,
+#semantic-search {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 11px;
+    color: var(--text-primary);
+    min-width: 0;
+}
+.workspace-search-input::placeholder,
+#semantic-search::placeholder { color: var(--text-label); }
+
+.workspace-view-controls,
+#view-controls { display: flex; gap: 2px; }
+
+.workspace-view-controls button,
+#view-controls button {
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    transition: background 0.12s, color 0.12s;
+}
+.workspace-view-controls button:hover,
+#view-controls button:hover  { background: var(--accent-dim); color: var(--text-primary); }
+.workspace-view-controls button.active,
+#view-controls button.active { background: var(--accent-dim); color: var(--accent); }
+.workspace-view-controls button svg,
+#view-controls button svg    { width: 14px; height: 14px; stroke-width: 1.5; }
+
+/* ── Status Bar ── */
+sovereign-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    height: 22px;
+    padding: 0 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    background: var(--bg-1);
+    user-select: none;
+}
+
+.status-left  { opacity: 0.7; }
+.status-right { color: var(--text-primary); }

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GPU-powered semantic file explorer for sovereign workspaces.">
+    <title>Sovereign Explorer</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons: Lucide (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.300.0/dist/umd/lucide.min.js"></script>
+
+    <!-- Terminal: xterm.js (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/css/xterm.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.11.0/lib/addon-fit.js"></script>
+
+    <!-- Theme + Structural CSS -->
+    <link id="theme-css" rel="stylesheet" href="themes/orio.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="features.css">
+</head>
+
+<body>
+    <div id="boot-diagnostics" hidden></div>
+    <div id="app">
+
+        <!-- ═══════════════════════════════════════════════
+             APPLICATION TOOLBAR (fixed top ribbon)
+             ═══════════════════════════════════════════════ -->
+        <div id="app-toolbar">
+            <span class="brand">SOVEREIGN</span>
+
+            <div class="toolbar-group">
+                <!-- Settings Menu -->
+                <button id="menu-settings" class="toolbar-btn">
+                    <i data-lucide="settings" class="toolbar-icon"></i>
+                    <span>Settings</span>
+                </button>
+                <div id="dropdown-settings" class="toolbar-dropdown">
+                    <div class="dropdown-label">PREFERENCES</div>
+                    <label class="dropdown-row">
+                        <span>Show hidden files</span>
+                        <input type="checkbox" id="opt-hidden-files">
+                    </label>
+                    <label class="dropdown-row">
+                        <span>Confirm deletes</span>
+                        <input type="checkbox" id="opt-confirm-delete" checked>
+                    </label>
+                    <label class="dropdown-row">
+                        <span>Momentum Sidebar</span>
+                        <input type="checkbox" id="opt-momentum-sidebar" checked>
+                    </label>
+
+                    <div class="dropdown-label"
+                        style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 8px;">STARTUP</div>
+                    <div class="dropdown-row-stack">
+                        <span class="tiny-label">Custom Path:</span>
+                        <span id="startup-path-display" class="path-preview">None (Home)</span>
+                        <button id="btn-clear-startup" class="scan-btn"
+                            style="margin-top: 4px; padding: 2px 8px; font-size: 10px;">
+                            <i data-lucide="rotate-ccw" style="width: 10px; height: 10px;"></i>
+                            <span>Reset to Home</span>
+                        </button>
+                    </div>
+
+                    <div class="dropdown-label"
+                        style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 8px;">TYPOGRAPHY
+                    </div>
+                    <button id="btn-open-typo" class="dropdown-row scan-btn" style="width: 100%; border: none;">
+                        <span>Advanced Typography...</span>
+                        <i data-lucide="edit-3"></i>
+                    </button>
+                    <button id="btn-open-visuals" class="dropdown-row scan-btn" style="width: 100%; border: none;">
+                        <span>Custom Appearance...</span>
+                        <i data-lucide="sliders"></i>
+                    </button>
+                </div>
+
+                <!-- Theme Menu -->
+                <button id="menu-theme" class="toolbar-btn">
+                    <i data-lucide="palette" class="toolbar-icon"></i>
+                    <span>Theme</span>
+                </button>
+                <div id="dropdown-theme" class="toolbar-dropdown">
+                    <div class="dropdown-label">ICON THEME</div>
+                    <select id="theme-selector" class="theme-select">
+                        <option value="orio">ORIO (Default)</option>
+                    </select>
+
+                    <div class="dropdown-label"
+                        style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 8px;">ALIGNMENT</div>
+                    <button id="btn-open-icon-themer" class="dropdown-row scan-btn" style="width: 100%; border: none;">
+                        <span>Theme Alignment Wizard...</span>
+                        <i data-lucide="wand-2"></i>
+                    </button>
+                </div>
+
+                <!-- IPC Telemetry -->
+                <button id="menu-telemetry" class="toolbar-btn">
+                    <i data-lucide="activity" class="toolbar-icon"></i>
+                    <span>Telemetry</span>
+                </button>
+
+                <!-- Plugin Manager -->
+                <button id="btn-plugins" class="toolbar-btn">
+                    <i data-lucide="package" class="toolbar-icon"></i>
+                    <span>Plugins</span>
+                </button>
+            </div>
+
+            <div class="toolbar-spacer"></div>
+
+            <!-- I/O Pulse HUD -->
+            <div id="pulse-badge" title="Live Drive Metabolism" style="display: none;">
+                <span class="pulse-text" id="pulse-read">↓0.0</span>
+                <span class="pulse-text" id="pulse-write">↑0.0</span>
+            </div>
+
+            <!-- GPU Status Badge -->
+            <div id="gpu-badge" title="GPU Semantic Engine Status">
+                <i data-lucide="cpu" class="toolbar-icon"></i>
+                RTX 3060
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             MAIN LAYOUT (sidebar + workspace)
+             ═══════════════════════════════════════════════ -->
+        <div id="main-layout">
+
+            <!-- ── Sidebar ── -->
+            <aside id="sidebar">
+                <sovereign-bookmarks></sovereign-bookmarks>
+
+                <div class="sidebar-section-label">DRIVES</div>
+                <div id="drive-list">
+                    <!-- Drive items will be injected here -->
+                </div>
+
+                <div id="sidebar-momentum-wrap">
+                    <div class="sidebar-section-header" style="margin-top: 24px;">
+                        <div class="sidebar-section-label">LIVE MOMENTUM</div>
+                        <div class="section-controls">
+                            <button id="btn-add-workspace" title="Add Workspace">+</button>
+                            <button id="btn-toggle-momentum" title="Toggle Feed">▼</button>
+                        </div>
+                    </div>
+                    <div id="momentum-workspaces" style="display: none; margin-bottom: 8px;">
+                        <!-- Workspaces will be injected here -->
+                    </div>
+                    <div id="momentum-feed" style="max-height: 200px; overflow-y: auto;">
+                        <!-- Momentum items will be injected here -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section-label">FILE TREE</div>
+                <sovereign-file-tree id="file-tree"></sovereign-file-tree>
+            </aside>
+
+            <div class="splitter-v" id="split-sidebar"></div>
+
+            <!-- ── Workspace ── -->
+            <main id="workspace">
+                <sovereign-workspace-host id="workspace-host"></sovereign-workspace-host>
+
+                <div class="splitter-h" id="split-terminal"></div>
+
+                <!-- Terminal Dock -->
+                <sovereign-terminal-dock id="terminal-dock"></sovereign-terminal-dock>
+
+            </main>
+
+            <div class="splitter-v" id="split-scrying"></div>
+
+            <!-- ── Scrying Inspector (Right Panel) ── -->
+            <sovereign-inspector id="scrying-panel"></sovereign-inspector>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         PLUGIN MANAGER MODAL
+         ═══════════════════════════════════════════════ -->
+    <sovereign-plugin-manager id="plugin-manager"></sovereign-plugin-manager>
+    <sovereign-visual-customizer id="visual-customizer-modal"></sovereign-visual-customizer>
+
+    <!-- ═══════════════════════════════════════════════
+         IPC TELEMETRY MODAL (stub)
+         ═══════════════════════════════════════════════ -->
+    <div id="telemetry-modal" class="modal-backdrop">
+        <div class="modal-window">
+            <div class="modal-header">
+                <span class="modal-title">IPC Telemetry</span>
+                <button id="modal-close" class="modal-close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="telemetry-placeholder">
+                    <i data-lucide="activity" class="telemetry-hero-icon"></i>
+                    <p>Telemetry panels will appear here.</p>
+                    <p class="text-dim">Customizable, arrangeable dashboards for IPC, GPU, and system metrics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         ADVANCED TYPOGRAPHY OVERLAY
+         ═══════════════════════════════════════════════════ -->
+    <div id="typo-modal" class="modal-backdrop">
+        <div class="modal-window" style="width: 800px;">
+            <div class="modal-header">
+                <span class="modal-title">Advanced Typography</span>
+                <button id="typo-close" class="modal-close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body typo-grid">
+                <!-- Zone: Application UI -->
+                <div class="typo-zone">
+                    <h3>Application UI</h3>
+                    <p>The font used for sidebars, toolbars, and layout text.</p>
+                    <div class="typo-ctrl">
+                        <span>Font Family</span>
+                        <div class="font-select-wrap">
+                            <select id="typo-ui-font" class="font-select">
+                                <option value="'Inter', sans-serif">Inter (Default)</option>
+                                <option value="system-ui">System UI</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Font Weight</span>
+                            <span id="val-ui-weight" class="typo-val">400</span>
+                        </div>
+                        <input type="range" id="typo-ui-weight" min="100" max="900" step="100" value="400">
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Font Size</span>
+                            <span id="val-ui-size" class="typo-val">13px</span>
+                        </div>
+                        <input type="range" id="typo-ui-size" min="10" max="18" step="1" value="13">
+                    </div>
+                </div>
+
+                <!-- Zone: Terminal / Scope -->
+                <div class="typo-zone">
+                    <h3>Terminal & Scrying</h3>
+                    <p>The monospaced font used for data visualization and IO.</p>
+                    <div class="typo-ctrl">
+                        <span>Font Family</span>
+                        <div class="font-select-wrap">
+                            <select id="typo-mono-font" class="font-select">
+                                <option value="'JetBrains Mono', monospace">JetBrains Mono (Default)</option>
+                                <option value="monospace">Standard Monospace</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Font Weight</span>
+                            <span id="val-mono-weight" class="typo-val">400</span>
+                        </div>
+                        <input type="range" id="typo-mono-weight" min="100" max="900" step="100" value="400">
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Font Size</span>
+                            <span id="val-mono-size" class="typo-val">12px</span>
+                        </div>
+                        <input type="range" id="typo-mono-size" min="9" max="20" step="1" value="12">
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Phosphor Glow</span>
+                            <span id="val-mono-glow" class="typo-val">0</span>
+                        </div>
+                        <input type="range" id="typo-mono-glow" min="0" max="10" step="1" value="0">
+                    </div>
+
+                    <div style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"></div>
+                    <h3>Metabolic Colors</h3>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Terminal Background</span>
+                        </div>
+                        <input type="color" id="typo-mono-bg" value="#000000"
+                            style="width: 100%; height: 30px; border: 1px solid var(--border); background: transparent; cursor: pointer;">
+                    </div>
+                    <div class="typo-ctrl">
+                        <div class="typo-ctrl-header">
+                            <span>Terminal Text</span>
+                        </div>
+                        <input type="color" id="typo-mono-color" value="#00ff00"
+                            style="width: 100%; height: 30px; border: 1px solid var(--border); background: transparent; cursor: pointer;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btn-refresh-fonts" class="scan-btn">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Refresh System Fonts</span>
+                </button>
+                <div style="font-size: 10px; color: var(--text-dim);">Changes are applied in real-time.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         COMMAND PALETTE (Custom Element)
+         ═══════════════════════════════════════════════════ -->
+    <sovereign-palette id="command-palette"></sovereign-palette>
+    <sovereign-scaffolder id="scaffolder"></sovereign-scaffolder>
+
+    <!-- ═══════════════════════════════════════════════════
+         THE SATCHEL (Scaffold)
+         ═══════════════════════════════════════════════════ -->
+    <div id="satchel-container">
+        <!-- Visual clipboard will be rendered here -->
+    </div>
+
+    <!-- File Context Menu -->
+    <sovereign-context-menu id="file-context-menu"></sovereign-context-menu>
+
+    <!-- List Header Context Menu (must be outside satchel to survive re-renders) -->
+    <div id="header-context-menu" class="context-menu" style="display: none;">
+        <div class="context-menu-item" data-col="modified">
+            <input type="checkbox" id="col-opt-modified" checked>
+            <span>Date Modified</span>
+        </div>
+        <div class="context-menu-item" data-col="size">
+            <input type="checkbox" id="col-opt-size" checked>
+            <span>Size</span>
+        </div>
+        <div class="context-menu-item" data-col="diff">
+            <input type="checkbox" id="col-opt-diff" checked>
+            <span>Diff Activity</span>
+        </div>
+    </div>
+
+    <!-- Icon Themer Modal -->
+    <sovereign-icon-themer id="icon-themer"></sovereign-icon-themer>
+
+    <!-- App entry point (ES Module) -->
+    <script>
+        (() => {
+            const MAX_LINES = 18;
+            const getPanel = () => document.getElementById('boot-diagnostics');
+
+            function pushLine(level, message) {
+                const panel = getPanel();
+                if (!panel) return;
+                panel.hidden = false;
+
+                // Ensure close button exists
+                if (!document.getElementById('boot-diag-close')) {
+                    const closeBtn = document.createElement('div');
+                    closeBtn.id = 'boot-diag-close';
+                    closeBtn.textContent = '×';
+                    closeBtn.onclick = () => window.__sovBootDiag.clear();
+                    panel.appendChild(closeBtn);
+                }
+
+                const line = document.createElement('div');
+                line.className = `boot-line ${level}`;
+                line.textContent = `[${level}] ${message}`;
+                panel.appendChild(line);
+
+                // Keep lines limited but don't count the close button
+                while (panel.querySelectorAll('.boot-line').length > MAX_LINES) {
+                    const first = panel.querySelector('.boot-line');
+                    if (first) panel.removeChild(first);
+                }
+            }
+
+            window.__sovBootDiag = {
+                log: (message) => pushLine('info', message),
+                error: (message) => pushLine('error', message),
+                clear: () => {
+                    const panel = getPanel();
+                    if (!panel) return;
+                    panel.innerHTML = '';
+                    panel.hidden = true;
+                }
+            };
+
+            window.addEventListener('error', (event) => {
+                const source = event.filename ? `${event.filename.split('/').pop()}:${event.lineno}` : 'runtime';
+                pushLine('error', `${source} ${event.message}`);
+            });
+
+            window.addEventListener('unhandledrejection', (event) => {
+                const reason = event.reason?.stack || event.reason?.message || String(event.reason);
+                pushLine('error', `promise ${reason}`);
+            });
+        })();
+    </script>
+    <script type="module" src="app.js"></script>
+    <!-- Hydrate Lucide icons in the static HTML -->
+    <script>
+        try {
+            if (window.lucide?.createIcons) {
+                window.lucide.createIcons();
+            }
+        } catch (e) {
+            console.warn("Lucide hydration failed (likely CDN blocked):", e);
+        }
+    </script>
+</body>
+
+</html>

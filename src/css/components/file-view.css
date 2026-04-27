@@ -1,0 +1,177 @@
+:root {
+    --icon-size: 16px;
+    --grid-item-min-width: 100px;
+}
+
+/* ═══════════════════════════════════════════════════
+   FILE VIEW (LIST & GRID)
+   ═══════════════════════════════════════════════════ */
+sovereign-file-list,
+.file-list-host,
+#file-list {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+/* ── List Mode ── */
+sovereign-file-list.view-list,
+.file-list-host.view-list,
+#file-list.view-list {
+    padding: 4px 16px 16px;
+}
+
+.file-placeholder {
+    color: var(--text-label);
+    font-size: 12px;
+    padding: 20px 8px;
+}
+.file-placeholder em { color: var(--text-dim); }
+.file-placeholder.search-empty { color: var(--text-dim); }
+.file-placeholder.search-empty strong { color: var(--text-primary); }
+
+
+.file-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 150px 80px 80px;
+    align-items: center;
+    padding: 0 8px;
+    height: 30px;
+    border-radius: var(--radius);
+    cursor: default;
+    transition: background 0.1s;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.file-row:not(.file-header):hover { background: var(--accent-dim); }
+.file-row.selected                { background: var(--selection-bg); }
+.file-row.is-dir                  { cursor: pointer; }
+
+.file-header {
+    height: 26px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
+    color: var(--text-label);
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: default;
+}
+
+.col-icon     { display: grid; place-items: center; }
+.col-name     { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; padding-left: 4px; }
+.col-modified { font-size: 11px; color: var(--text-dim); text-align: right; padding-right: 12px; }
+.time-dim     { color: var(--text-label); }
+.col-size     { font-size: 11px; color: var(--text-dim); text-align: right; }
+.col-diff     { font-size: 11px; font-family: monospace; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Toggles */
+sovereign-file-list.view-list,
+.file-list-host.view-list,
+#file-list.view-list {
+    --col-icon-w: 28px;
+    --col-modified-w: 150px;
+    --col-size-w: 80px;
+    --col-diff-w: 80px;
+}
+
+sovereign-file-list.view-list .file-row,
+.file-list-host.view-list .file-row,
+#file-list.view-list .file-row {
+    grid-template-columns: var(--col-icon-w) minmax(0, 1fr) var(--col-modified-w) var(--col-size-w) var(--col-diff-w);
+}
+
+.hide-col-modified { --col-modified-w: 0px; }
+.hide-col-size { --col-size-w: 0px; }
+.hide-col-diff { --col-diff-w: 0px; }
+
+.hide-col-modified .col-modified,
+.hide-col-size .col-size,
+.hide-col-diff .col-diff {
+    display: none;
+}
+
+/* ── Icons ── */
+.file-icon    { width: var(--icon-size); height: var(--icon-size); stroke-width: 1.5; color: var(--text-dim); }
+.is-dir .file-icon { color: var(--amber); }
+
+.custom-icon    { width: var(--icon-size); height: var(--icon-size); object-fit: contain; }
+.custom-icon-lg { width: calc(var(--icon-size) * 3); height: calc(var(--icon-size) * 3); object-fit: contain; }
+.file-icon-lg   { width: calc(var(--icon-size) * 3); height: calc(var(--icon-size) * 3); stroke-width: 1; color: var(--text-dim); }
+
+/* ── Grid Mode ── */
+sovereign-file-list.view-grid,
+.file-list-host.view-grid,
+#file-list.view-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-min-width), 1fr));
+    gap: 4px;
+    padding: 16px;
+    align-content: start;
+}
+
+.grid-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px 10px;
+    border-radius: var(--radius);
+    cursor: default;
+    user-select: none;
+    transition: background 0.1s;
+    -webkit-user-drag: none;
+}
+
+.file-row *,
+.grid-cell * {
+    -webkit-user-drag: none;
+}
+
+body.file-list-pointer-dragging,
+body.file-list-pointer-dragging * {
+    cursor: grabbing !important;
+}
+
+sovereign-file-list.drag-over-pane,
+.file-list-host.drag-over-pane,
+#file-list.drag-over-pane {
+    background: color-mix(in srgb, var(--accent-dim) 78%, transparent);
+    outline: 2px dashed var(--accent);
+    outline-offset: -4px;
+}
+
+.grid-cell:hover     { background: var(--accent-dim); }
+.grid-cell.selected  { background: var(--selection-bg); }
+.grid-cell.is-dir    { cursor: pointer; }
+
+.grid-icon { display: flex; align-items: center; justify-content: center; height: calc(var(--icon-size) * 3); }
+
+.grid-name {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.is-dir .grid-name { color: var(--amber); }
+
+/* ── Drag and Drop ── */
+.file-row.drag-over, .grid-cell.drag-over {
+    background: var(--accent-dim) !important;
+    outline: 2px dashed var(--accent);
+    outline-offset: -2px;
+}
+
+/* ── Search Highlighting ── */
+.col-name mark, .grid-name mark {
+    background: var(--accent-dim);
+    color: var(--amber);
+    font-weight: 700;
+    padding: 0 1px;
+    border-radius: 2px;
+}

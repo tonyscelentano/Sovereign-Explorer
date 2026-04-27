@@ -1,0 +1,70 @@
+{
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "devPath": "../src",
+    "distDir": "../src",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "Sovereign Explorer",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["$HOME/**"]
+      },
+      "shell": {
+        "all": false,
+        "execute": true,
+        "sidecar": false,
+        "scope": [
+          {
+            "name": "pwsh",
+            "cmd": "powershell.exe",
+            "args": ["-Command", { "validator": "\\S+" }]
+          }
+        ]
+      },
+      "window": {
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.sovereign.explorer",
+      "icon": [
+        "icons/icon.ico"
+      ],
+      "resources": [
+        "../src/assets/themes/IconPacks",
+        "../src/js/extensions"
+      ]
+    },
+    "security": {
+      "csp": "default-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' asset: asset://localhost https://cdn.jsdelivr.net data: blob:"
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 768,
+        "width": 1366,
+        "minHeight": 600,
+        "minWidth": 900,
+        "resizable": true,
+        "title": "Sovereign Explorer",
+        "transparent": false,
+        "decorations": true,
+        "fileDropEnabled": true
+      }
+    ]
+  }
+}

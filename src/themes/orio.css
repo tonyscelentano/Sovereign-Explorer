@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════
+   THEME: ORIO (Default / Neon Industrial)
+   ═══════════════════════════════════════════════════ */
+
+:root {
+    --bg-0:         #080808;   /* deepest layer  */
+    --bg-1:         #101010;   /* sidebar        */
+    --bg-2:         #161616;   /* workspace      */
+    --bg-terminal:  #0c0c0c;   /* terminal dock  */
+    --border:       #232323;
+    --border-light: #2e2e2e;
+
+    --text-primary: #dedede;
+    --text-dim:     #666;
+    --text-label:   #444;
+
+    --accent:       #ffffff;
+    --accent-dim:   rgba(255,255,255,0.06);
+    --green:        #39d353;   /* terminal prompt / OK */
+    --amber:        #f0c040;   /* warnings / directories */
+    --red:          #e05555;   /* errors               */
+    --bg-surface:   #171717;
+    --bg-hover:     rgba(255,255,255,0.05);
+    --bg-active:    rgba(255,255,255,0.09);
+    --bg-deep:      #050505;
+
+    --font: 'JetBrains Mono', 'Segoe UI', monospace;
+    --radius: 5px;
+}

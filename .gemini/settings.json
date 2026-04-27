@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "sovereign-index": {
+      "command": ".mcp_venv\\Scripts\\python.exe",
+      "args": [
+        "scripts\\qdrant_bridge.py"
+      ]
+    }
+  }
+}
