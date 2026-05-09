@@ -4,7 +4,7 @@
 
 > **Status:** Pre-Alpha. Experimental and under active development.
 
-<img width="1280" height="818" alt="image" src="https://github.com/user-attachments/assets/7e6a7fd5-eac3-4dec-ae5b-091137d82293" />
+<img width="2557" height="1390" alt="SovEx" src="https://github.com/user-attachments/assets/cb1dcb87-746d-4628-8d4c-b2e6dc5a8de8" />
 
 ---
 
