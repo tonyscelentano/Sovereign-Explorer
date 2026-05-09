@@ -25,14 +25,21 @@ src/assets/themes/IconPacks/*
 .env
 .env.*
 !.env.example
+.claude/
+.gemini/
+.roadmaps/
 .edge-headless/
 .mcp_venv/
 backups/
 
 # Python
 .venv/
+**/.venv/
 **/__pycache__/
 .pytest_cache/
+
+# Accidental Windows cache artifacts
+src-tauri/%SystemDrive%/
 
 # IDEs
 .vscode/

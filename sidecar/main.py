@@ -11,6 +11,11 @@ from PIL import Image
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+APP_DATA_DIR = os.path.join(
+    os.getenv('APPDATA') or os.path.expanduser('~'),
+    'sovereign-explorer'
+)
+
 def send_msg(type, data):
     """Sends a JSON message to stdout for Rust/Tauri to consume."""
     try:
@@ -19,7 +24,7 @@ def send_msg(type, data):
         sys.exit(0)
 
 # ─── THUMBNAIL ENGINE ────────────────────────────────────────────────────────
-CACHE_DIR = os.path.join(os.getenv('APPDATA'), 'sovereign-explorer', 'cache', 'thumbnails')
+CACHE_DIR = os.path.join(APP_DATA_DIR, 'cache', 'thumbnails')
 if not os.path.exists(CACHE_DIR):
     os.makedirs(CACHE_DIR, exist_ok=True)
 
@@ -129,7 +134,7 @@ class MomentumHandler(FileSystemEventHandler):
                     "time": time.time()
                 })
         except Exception as e:
-            with open(os.path.join(os.getenv('APPDATA'), 'sovereign-explorer', 'sidecar_error.log'), 'a') as log:
+            with open(os.path.join(APP_DATA_DIR, 'sidecar_error.log'), 'a') as log:
                 log.write(f"Error processing {path}: {e}\n")
             pass 
 
@@ -175,7 +180,7 @@ def main():
 
     try:
         last_disk = psutil.disk_io_counters()
-        watch_file_path = os.path.join(os.getenv('APPDATA'), 'sovereign-explorer', 'watch_path.txt')
+        watch_file_path = os.path.join(APP_DATA_DIR, 'watch_path.txt')
         
         while True:
             # Liveness check
@@ -195,7 +200,7 @@ def main():
                     start_observers(current_watch_dirs)
                     send_msg("status", {"message": f"Sidecar Switched to {len(current_watch_dirs)} workspaces", "pid": os.getpid()})
             except Exception as e:
-                with open(os.path.join(os.getenv('APPDATA'), 'sovereign-explorer', 'sidecar_error.log'), 'a') as log:
+                with open(os.path.join(APP_DATA_DIR, 'sidecar_error.log'), 'a') as log:
                     log.write(f"Error reading watch_path.txt: {e}\n")
                 pass
 

@@ -1,9 +1,9 @@
-[README.md](https://github.com/user-attachments/files/27119398/README.md)
 # Sovereign Explorer
 
 **Sovereign Explorer** is a GPU-accelerated, telemetry-aware, and fully customizable file explorer built for the modern Windows power user. It combines the speed of **Rust** (Tauri), the system intelligence of **Python**, and a modular **Vanilla JS** frontend.
 
 > **Status:** Pre-Alpha. Experimental and under active development.
+
 <img width="1280" height="818" alt="image" src="https://github.com/user-attachments/assets/7e6a7fd5-eac3-4dec-ae5b-091137d82293" />
 
 ---

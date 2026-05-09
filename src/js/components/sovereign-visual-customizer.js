@@ -22,7 +22,7 @@ class SovereignVisualCustomizer extends HTMLElement {
         this.id = 'visual-customizer-modal';
         this._render();
         this._loadSaved();
-        
+
         this.addEventListener('click', (e) => {
             if (e.target === this) this.close();
         });
@@ -39,7 +39,7 @@ class SovereignVisualCustomizer extends HTMLElement {
     _apply(token, value) {
         document.documentElement.style.setProperty(`--${token}`, value);
         localStorage.setItem(`sov_vis_${token}`, value);
-        
+
         const hexDisplay = this.querySelector(`#hex-${token}`);
         if (hexDisplay) hexDisplay.value = value.toUpperCase();
     }
@@ -104,7 +104,7 @@ class SovereignVisualCustomizer extends HTMLElement {
 
         this.querySelector('#visuals-close').onclick = () => this.close();
         this.querySelector('#btn-visuals-reset').onclick = () => this._resetAll();
-        
+
         if (window.hydrateIcons) window.hydrateIcons();
         if (window.lucide?.createIcons) window.lucide.createIcons();
     }
